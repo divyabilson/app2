@@ -9,9 +9,9 @@ pipeline {
         imageName = "divyabilson/nodejsapp2-repo:${BUILD_NUMBER}"
         containerName = "nodetest2"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        GITHUB_URL = "https://github.com/divyabilson/nodejsapp2"
+        GITHUB_URL = "https://github.com/divyabilson/app2"
         S3_BUCKET = "mynodejsapp001"
-        APP_SERVER_IP = "54.211.242.156"
+        APP_SERVER_IP = "3.92.225.137"
         USERNAME = "ubuntu"
         AWS_KEY_ID = "web_server_1"
         
@@ -62,6 +62,7 @@ pipeline {
                     sh '''
                     chmod 400 $SSH_KEY_PATH
                     docker save -o image${BUILD_NUMBER}.tar $imageName
+                    ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$APP_SERVER_IP 'rm -rf image*.tar'
                     scp -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$APP_SERVER_IP:~
                     ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$APP_SERVER_IP 'sudo docker load -i image*.tar'
                     ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$APP_SERVER_IP 'docker run -p 80:3000 -d --restart unless-stopped --name nodejsapp2 $(docker images -qa)'
