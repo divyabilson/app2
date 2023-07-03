@@ -64,6 +64,7 @@ pipeline {
                     docker save -o image${BUILD_NUMBER}.tar $imageName
                     ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$APP_SERVER_IP 'rm -rf image*.tar'
                     scp -o StrictHostKeyChecking=no -i $SSH_KEY_PATH -r image${BUILD_NUMBER}.tar $USERNAME@$APP_SERVER_IP:~
+                    ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$SERVER_IP 'docker rm -f nodejsapp2'
                     ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$SERVER_IP 'docker rmi -f $(docker images -q) 2> /dev/null'
                     ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$APP_SERVER_IP 'sudo docker load -i image*.tar'
                     ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH $USERNAME@$APP_SERVER_IP 'docker run -p 80:3000 -d --restart unless-stopped --name nodejsapp2 $(docker images -qa)'
