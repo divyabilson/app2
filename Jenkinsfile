@@ -10,8 +10,7 @@ pipeline {
         containerName = "nodetest2"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         GITHUB_URL = "https://github.com/divyabilson/app2"
-        S3_BUCKET = "mynodejsapp001"
-        APP_SERVER_IP = "3.92.225.137"
+        APP_SERVER_IP = "54.227.89.75"
         USERNAME = "ubuntu"
         AWS_KEY_ID = "web_server_1"
         
